@@ -1,0 +1,29 @@
+<!-- templates/registration/signup.html -->
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+  <form method="post" >
+    <div class="login-page">
+      <div class="form">
+        <form class="register-form">
+        {% csrf_token %}
+
+          <input type="text" name="first_name" placeholder="First name" class="first-name"/>
+          <input type="text" name="last_name" placeholder="Last name" class="last-name"/>
+          <input type="text" placeholder="mobile number or email" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus="" required="" id="id_username"/>
+          <input type="password" placeholder="New password" name="password1" autocomplete="new-password" required="" id="id_password1"/>
+          <input type="password" placeholder="Confirm new password" name="password2" autocomplete="new-password" required="" id="id_password2"/>
+          <button type="submit">Sign Up</button>
+          <p class="message">Already registered? <a href="{% url 'login' %}">Sign In</a></p>
+        </form>
+      </div>
+    </div>
+  </form>
+{% endblock %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}

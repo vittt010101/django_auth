@@ -1,0 +1,303 @@
+<!-- templates/home.html-->
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<header style="position: fixed;width: 100%;background-color: white;">
+    <nav>
+        <ul>
+            <li> <a href="#" class="active"> <i class="fa-solid fa-users"></i> </a> </li>
+            <li> <a href="#"> <i class="fa fa-search    "></i> </a> </li>
+            
+            <li id="space2"> </li>
+               
+            <li> <a class="active"  href="{% url 'home' %}"  id="home"> <i class="fa fa-home"></i> </a> </li>
+            <li> <a class="" data-tooltip="Group" href="#" id="group"> <i class="fa fa-user-friends    "></i> </a></li>
+            <li> <a class="" data-tooltip="Watch" href="#" id="tv"> <i class="fas fa-tv    "></i> </a> </li>
+            <li> <a class="" data-tooltip="Friend" href="#" id="friend"> <i class="fas fa-user-alt    "></i> </a> </li>
+            <li id="space1"></li>
+            <li> <button class="" data-tooltip="Add" id="btn_plus"><i class="fas fa-plus    "></i></button> </li>
+            <li> <button class="" data-tooltip="Message" id="btn_msg"><i class="fab fa-facebook-messenger    "></i></button></li>
+            <li> <button class="" data-tooltip="Notification" id="btn_bell"> <i class="fas fa-bell    "></i></button></li>
+            <li>  <button class="" data-tooltip="Profile" id="btn_profile"><i class="fas fa-user-cog    "></i></button>  </li>
+            <li>  <a href="{% url 'logout' %}" class="" data-tooltip="Profile" id="btn_profile"><i class="fas fa-sign-out-alt"></i></a>  </li>
+        </ul>
+    </nav>
+</header>
+<header>
+    <nav>
+        <ul>
+            <li> <a href="#"> <i class="fa fa-search    "></i> </a> </li>
+            
+            <li id="space2"> </li>
+               
+            <li> <a class="active"  href="{% url 'home' %}"  id="home"> <i class="fa fa-home"></i> </a> </li>
+            <li> <a class="" data-tooltip="Group" href="#" id="group"> <i class="fa fa-user-friends    "></i> </a></li>
+            <li> <a class="" data-tooltip="Watch" href="#" id="tv"> <i class="fas fa-tv    "></i> </a> </li>
+            <li> <a class="" data-tooltip="Friend" href="#" id="friend"> <i class="fas fa-user-alt    "></i> </a> </li>
+            <li id="space1"></li>
+            <li> <button class="" data-tooltip="Add" id="btn_plus"><i class="fas fa-plus    "></i></button> </li>
+            <li> <button class="" data-tooltip="Message" id="btn_msg"><i class="fab fa-facebook-messenger    "></i></button></li>
+            <li> <button class="" data-tooltip="Notification" id="btn_bell"> <i class="fas fa-bell    "></i></button></li>
+            <li>  <button class="" data-tooltip="Profile" id="btn_profile"><i class="fas fa-user-cog    "></i></button>  </li>
+            <li>  <a href="{% url 'logout' %}" class="" data-tooltip="Profile" id="btn_profile"><i class="fas fa-sign-out-alt"></i></a>  </li>
+        </ul>
+    </nav>
+</header>
+<div class="container" id="app">
+    <div class="left-panel">
+    </div>
+    <div class="post create">
+        <div class="post-top">
+            <div class="dp">
+                <img src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-people-avatar-icon-user-profile-free-vector-png-image_4815126.jpg" alt="">
+            </div>
+            <input type="text" placeholder="{{user.username}}さん、何を考えていますか?" data-toggle="modal"
+            data-target="#addPostModal"/>
+        </div>
+
+        
+
+        <div class="post" v-for="post in Posts">
+            <div class="post-top">
+                <div class="post-top-content">
+                <div class="post-top-nav">
+                <div class="dp">
+                    <img src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-people-avatar-icon-user-profile-free-vector-png-image_4815126.jpg" alt="">
+                </div>
+     
+                <div class="post-info">
+                    <p class="name" style="margin-bottom: 0;">${post.username}</p>
+                    <span class="time">${post.created_datetime}</span>
+                </div>
+                <i class=""></i>
+            </div>
+
+            <div class="post-content">
+                
+                ${post.content}
+            
+            </div>
+            
+
+            <br>
+            
+            <div class="post-bottom">
+                <div class="action" v-on:click="reactionUoC(post)" v-bind:style="{color: reactionColor(post.reaction_list) > 0 ? '#fd7e14' : ''}">
+                    <i class="far fa-thumbs-up"></i>
+                    <span>いいね</span>
+                </div>
+                <div class="action" v-on:click="focusComment('input'+post.id)">
+                    <i class="far fa-comment"></i>
+                    <span>コメント</span>
+                </div>
+                <div class="action" v-on:click="shareAction('近日公開')">
+                    <i class="fa fa-share"></i>
+                    <span>共有</span>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+        <div class="post-top" style="padding-left: 35px;"  v-for="comment in post.comment_list">
+            <div class="post-top-content">
+            <div class="post-top-nav">
+            <div class="dp">
+                <img src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-people-avatar-icon-user-profile-free-vector-png-image_4815126.jpg" alt="">
+            </div>
+ 
+            <div class="post-info">
+                <p class="name" style="margin-bottom: 0;">${comment.username}</p>
+                <span class="time">${comment.created_datetime}</span>
+            </div>
+            <i class=""></i>
+        </div>
+
+        <div class="post-content">
+            
+            ${comment.content}
+        
+        </div>
+            </div></div>
+        <div class="post-top">
+            <div class="dp">
+                <img src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-people-avatar-icon-user-profile-free-vector-png-image_4815126.jpg" alt="">
+            </div>
+            <input type="text" v-bind:id="'input'+post.id" v-model="post.new_comment.content" v-on:keydown.enter="onKeyDown(post)" placeholder="Write a comment " />
+        </div>
+
+        
+        </div>
+    </div>
+    <div class="right-panel">
+        <div class="pages-section" style="margin-top: 10px;">
+            <h4>コンタクト</h4>
+            <a class='page' href="#" v-for="user in Users">
+                <div class="dp">
+                    <img src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-people-avatar-icon-user-profile-free-vector-png-image_4815126.jpg" alt="">
+                </div>
+                <p class="name" style="margin-bottom: 0;">${user.username}</p>
+            </a>
+        </div>
+        
+    </div>        
+        <!-- Add post Modal -->
+        <div class="modal fade" id="addPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">
+                新い投稿
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <form v-on:submit.prevent="addPost()">
+              <div class="modal-body">
+                <div class="form-group">
+                  <textarea class="form-control" id="content" placeholder="本文を入力してください" v-model="newPost.content"
+                    required="required" rows="3"></textarea>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-progress" data-dismiss="modal">
+                  閉じる
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  保存
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        </div>
+        <!-- End of add post modal -->
+</div>  
+<div>
+
+  </div>
+      
+      <script>
+      var myObject = new Vue({
+        el: '#app',
+        delimiters: ['${','}'],
+        data: {
+            Posts: [],
+            Users: [],
+            loading: false,
+            currentPost: {},
+            message: null,
+            user_id: '{{ user.id }}',
+            newPost: { 'user_id': '{{ user.id }}', 'content': null },
+        },
+        mounted: function() {
+            this.getPosts();
+        },
+methods: {
+    focusComment: function (e) {
+        $("#" + e).focus();
+    },
+    shareAction: function (e) {
+        alert(e)
+    },
+    reactionColor:function (reactionList) {              
+                reactionFiltered = reactionList.filter(   
+                    function (reaction) {    
+                        return reaction.reaction_type == 0 && reaction.user_id == '{{ user.id }}'
+                    }
+                );
+                return reactionFiltered.length;
+            },
+onKeyDown: function(post) {
+    this.addComment({
+        'post_id':post.id,
+        'content':post.new_comment.content,
+        'user_id':this.user_id
+    })
+},
+ getPosts: function(user_id) {
+  this.loading = true;
+  let url =  '/api/posts/'
+  if(user_id){
+    url =  '/api/posts/?user_id=' + user_id
+  }
+  
+  this.$http.get(url)
+      .then((response) => {
+        this.Posts = response.data.post_list;
+        this.Users = response.data.user_list;
+        console.log(this.Posts)
+        this.loading = false;
+      })
+      .catch((err) => {
+       this.loading = false;
+       console.log(err);
+      })
+ },
+ addPost: function() {
+  this.loading = true;
+  console.log(this.newPost)
+  this.$http.post('/api/posts/',this.newPost, {headers: { "X-CSRFToken": '{{csrf_token}}' }})
+      .then((response) => {
+        this.loading = false;
+        this.getPosts();
+        $("#addPostModal").modal('hide');
+      })
+      .catch((err) => {
+        this.loading = false;
+        console.log(err);
+      })
+ },
+ addComment: function(comment) {
+  this.loading = true;
+  console.log(this.newPost)
+  this.$http.post('/api/comments/',comment, {headers: { "X-CSRFToken": '{{csrf_token}}' }})
+      .then((response) => {
+        this.loading = false;
+        this.getPosts();
+        $("#addPostModal").modal('hide');
+      })
+      .catch((err) => {
+        this.loading = false;
+        console.log(err);
+      })
+ },
+ reactionUoC: function(post) {
+  this.loading = true;  
+  this.$http.put('/api/reactions/',{
+      'user_id': this.user_id,
+      'post_id': post.id,
+      'reaction_type': this.reactionColor(post.reaction_list) > 0 ? -1 : 0,
+  }, {headers: { "X-CSRFToken": '{{csrf_token}}' }})
+      .then((response) => {
+        this.loading = false;
+        this.getPosts();
+      })
+      .catch((err) => {
+        this.loading = false;
+        console.log(err);
+      })
+ },
+        }
+      })
+      </script>
+
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">Log In</a>
+{% endif %}
+{% endblock %}
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" />
+{% endblock %}
+
